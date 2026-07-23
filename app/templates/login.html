@@ -6,10 +6,13 @@
     <title>Login - Agenda Medica</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-    <div class="login-container">
-        <h1>Agenda Medica</h1>
-        <p class="subtitle">Faca login para acessar</p>
+<body class="login-page">
+    <div class="login-card">
+        <div class="login-brand">
+            <div class="brand-icon">A</div>
+            <h1>Agenda Medica</h1>
+            <p>Acesse sua conta para gerenciar agendamentos</p>
+        </div>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% for category, message in messages %}
@@ -28,6 +31,10 @@
             </div>
             <button type="submit" class="btn-login">Entrar</button>
         </form>
+
+        <div class="login-footer">
+            <p>Sistema de agendamentos medicos</p>
+        </div>
     </div>
 </body>
 </html>

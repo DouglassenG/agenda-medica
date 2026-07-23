@@ -7,14 +7,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://unpkg.com/tabulator-tables@6.3.1/dist/css/tabulator.min.css" rel="stylesheet">
 </head>
-<body>
-    <div class="agenda-container">
+<body class="agenda-page">
+    <div class="agenda-card">
         <div class="agenda-header">
-            <h1>Agenda Medica</h1>
+            <div>
+                <h1>Agenda Medica</h1>
+                <p class="welcome-text">Bem-vindo, {{ username }}!</p>
+            </div>
             <a href="{{ url_for('auth.logout') }}" class="btn-logout">Sair</a>
         </div>
-
-        <p style="margin-bottom: 16px; color: #718096;">Bem-vindo, {{ username }}!</p>
 
         <form method="GET" action="{{ url_for('auth.agenda') }}" class="search-bar">
             <input
@@ -43,7 +44,7 @@
 
     <script src="https://unpkg.com/tabulator-tables@6.3.1/dist/js/tabulator.min.js"></script>
     <script>
-        var dados = {{ agendamentos | tojson if agendamentos else '[]' | safe }};
+        var dados = {% if agendamentos %}{{ agendamentos | tojson | safe }}{% else %}[]{% endif %};
 
         var table = new Tabulator("#tabela-agenda", {
             data: dados,

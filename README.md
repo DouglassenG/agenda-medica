@@ -23,35 +23,38 @@ O sistema permite o login de um usuario e, apos a autenticacao, exibe os agendam
 
 ---
 
-## 📁 Estrutura do Projeto 
+## 📁 Estrutura do Projeto
+
+```text
 agenda-medica/
 ├── app/
-│ ├── static/
-│ │ └── style.css # Estilos da aplicacao
-│ ├── templates/
-│ │ ├── login.html # Tela de login
-│ │ └── agenda.html # Tela principal com tabela
-│ ├── init.py # Factory da app Flask
-│ ├── auth.py # Rotas de login, logout e agenda
-│ ├── models.py # Modelo de usuario e conexao SQLite
-│ └── api_client.py # Client HTTP para consumir a API mock
+│   ├── static/
+│   │   └── style.css
+│   ├── templates/
+│   │   ├── login.html
+│   │   └── agenda.html
+│   ├── __init__.py
+│   ├── auth.py
+│   ├── models.py
+│   └── api_client.py
 ├── api_mock/
-│ └── server.py # Servico separado com agendamentos mockados
+│   └── server.py
 ├── public/
-│ └── imagem-login.png # Imagem de fundo do login
+│   └── imagem-login.png
 ├── tests/
-│ ├── init.py
-│ ├── test_auth.py # Testes de autenticacao
-│ └── test_api.py # Testes da API mock
-├── .env.example # Template de variaveis de ambiente
+│   ├── __init__.py
+│   ├── test_auth.py
+│   └── test_api.py
+├── .env.example
 ├── .gitignore
-├── Dockerfile # Container da aplicacao principal
-├── Dockerfile.api # Container da API mock
-├── docker-compose.yml # Orquestracao dos servicos
-├── requirements.txt # Dependencias do projeto
-├── run.py # Ponto de entrada da aplicacao
-├── seed.py # Script de criacao do banco e usuario de teste
+├── Dockerfile
+├── Dockerfile.api
+├── docker-compose.yml
+├── requirements.txt
+├── run.py
+├── seed.py
 └── README.md
+```
 ---
 
 ## 🚀 Como Executar

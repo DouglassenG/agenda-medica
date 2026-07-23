@@ -1,3 +1,57 @@
+
+# 🏥 Agenda Medica
+
+Aplicacao web para gerenciamento de agendamentos medicos, desenvolvida como desafio tecnico com Python e Flask.
+
+---
+
+## 📋 Sobre o Projeto
+
+O sistema permite o login de um usuario e, apos a autenticacao, exibe os agendamentos medicos em uma tabela interativa com filtros e busca. Os dados de agendamentos sao consumidos via requisicao HTTP de uma API mock em servico separado.
+
+---
+
+## 🛠 Tecnologias Utilizadas
+
+- **Backend:** Python 3.12, Flask 3.1, Werkzeug
+- **Banco de Dados:** SQLite
+- **Frontend:** HTML5, CSS3, Jinja2, Tabulator.js 6.3
+- **HTTP Client:** Requests
+- **Testes:** Pytest
+- **Containerizacao:** Docker, Docker Compose
+- **Gerenciamento de ambiente:** python-dotenv
+
+---
+
+## 📁 Estrutura do Projeto 
+agenda-medica/
+├── app/
+│ ├── static/
+│ │ └── style.css # Estilos da aplicacao
+│ ├── templates/
+│ │ ├── login.html # Tela de login
+│ │ └── agenda.html # Tela principal com tabela
+│ ├── init.py # Factory da app Flask
+│ ├── auth.py # Rotas de login, logout e agenda
+│ ├── models.py # Modelo de usuario e conexao SQLite
+│ └── api_client.py # Client HTTP para consumir a API mock
+├── api_mock/
+│ └── server.py # Servico separado com agendamentos mockados
+├── public/
+│ └── imagem-login.png # Imagem de fundo do login
+├── tests/
+│ ├── init.py
+│ ├── test_auth.py # Testes de autenticacao
+│ └── test_api.py # Testes da API mock
+├── .env.example # Template de variaveis de ambiente
+├── .gitignore
+├── Dockerfile # Container da aplicacao principal
+├── Dockerfile.api # Container da API mock
+├── docker-compose.yml # Orquestracao dos servicos
+├── requirements.txt # Dependencias do projeto
+├── run.py # Ponto de entrada da aplicacao
+├── seed.py # Script de criacao do banco e usuario de teste
+└── README.md
 ---
 
 ## 🚀 Como Executar

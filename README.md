@@ -1,77 +1,146 @@
-# Agenda Medica
+---
 
-Aplicacao web para gerenciamento de agendamentos medicos, desenvolvida com Python e Flask.
+## 🚀 Como Executar
 
-## Tecnologias
-
-- Python 3.12
-- Flask 3.1
-- SQLite
-- Tabulator.js 6.3
-- Docker / Docker Compose
-- Pytest
-
-## Como executar com Docker
+### 🐳 Com Docker
 
 ```bash
 docker-compose up --build
 ```
 
-Acesse `http://localhost:5000` no navegador.
+A aplicacao estara disponivel em `http://localhost:5000`.
 
-## Como executar sem Docker
+### 💻 Sem Docker
+
+**1. Criar e ativar o ambiente virtual:**
 
 ```bash
 python -m venv venv
-.\venv\Scripts\Activate.ps1       # Windows
-source venv/bin/activate           # Linux/Mac
 
+# Windows
+.\venv\Scripts\Activate.ps1
+
+# Linux/Mac
+source venv/bin/activate
+```
+
+**2. Instalar dependencias:**
+
+```bash
 pip install -r requirements.txt
+```
+
+**3. Criar o banco e usuario de teste:**
+
+```bash
 python seed.py
 ```
 
-Em um terminal, inicie a API mock:
+**4. Iniciar a API mock (Terminal 1):**
 
 ```bash
 python api_mock/server.py
 ```
 
-Em outro terminal, inicie a aplicacao:
+**5. Iniciar a aplicacao (Terminal 2):**
 
 ```bash
 python run.py
 ```
 
-Acesse `http://localhost:5000`.
+**6. Acessar no navegador:** `http://localhost:5000`
 
-## Credenciais de teste
+---
 
-- **Usuario:** admin
-- **Senha:** admin123
+## 🔑 Credenciais de Teste
 
-## Exemplos de uso
+| Campo | Valor |
+|-------|-------|
+| Usuario | `admin` |
+| E-mail | `admin@agenda.com` |
+| Senha | `admin123` |
 
-1. Faca login com as credenciais acima
-2. A tabela exibe todos os agendamentos
-3. Use o campo de busca para filtrar por paciente, CPF ou medico
-4. Cada coluna possui filtro individual no cabecalho
+---
 
-## Testes
+## 📖 Exemplos de Uso
+
+1. Acesse `http://localhost:5000` e faca login com as credenciais acima
+2. A tabela exibe todos os agendamentos disponiveis
+3. Utilize o campo de busca para filtrar por **paciente**, **CPF** ou **medico**
+4. Cada coluna possui um filtro individual no cabecalho da tabela
+5. Clique em "Sair" para encerrar a sessao
+
+---
+
+## ✅ Testes Automatizados
+
+O projeto possui **8 testes** cobrindo autenticacao e API:
 
 ```bash
 pytest tests/ -v
 ```
 
-## Decisoes tecnicas
+🔐 **Testes de autenticacao (`test_auth.py`):**
+- Login com credenciais validas
+- Login com credenciais invalidas
+- Login com campos vazios
+- Logout
 
-- **Flask Factory Pattern:** permite criar instancias isoladas da app para testes
-- **API Mock como servico separado:** simula um cenario real onde o backend consome dados de outro servico via HTTP
-- **Tabulator.js via CDN:** evita build de frontend, mantendo o projeto simples
-- **SQLite:** banco leve e sem necessidade de servidor externo, ideal para o escopo do desafio
-- **Client HTTP com tratamento de erros:** cobre conexao recusada, timeout, resposta invalida e erro HTTP
+🌐 **Testes da API mock (`test_api.py`):**
+- Listagem de todos os agendamentos
+- Busca por nome de paciente
+- Busca sem resultado
+- Health check do servico
 
-## Limitacoes conhecidas
+---
 
-- Autenticacao por session (sem JWT)
-- Dados de agendamentos mockados (nao persistidos em banco)
+## ⚠️ Tratamento de Erros
+
+A aplicacao trata os seguintes cenarios de forma controlada:
+
+| Cenario | Comportamento |
+|---------|---------------|
+| Credenciais invalidas | Mensagem "Usuario ou senha invalidos" na tela de login |
+| Campos vazios no login | Mensagem "Preencha todos os campos" |
+| Nenhum agendamento encontrado | Mensagem "Nenhum registro encontrado" na tabela |
+| API indisponivel | Mensagem "Servico de agendamentos indisponivel" |
+| Timeout da API | Mensagem "Servico demorou para responder" |
+| Resposta invalida da API | Mensagem "Resposta da API em formato invalido" |
+| Erro de conexao com o banco | Mensagem "Erro interno" + log no servidor |
+
+Todas as falhas sao registradas via `logging` para facilitar a identificacao da causa.
+
+---
+
+## 🧠 Decisoes Tecnicas
+
+- **Flask Factory Pattern (`create_app`):** permite criar instancias isoladas da aplicacao para testes, evitando estado compartilhado entre execucoes
+- **API Mock como servico separado:** simula um cenario real onde o backend consome dados de outro servico via HTTP, rodando na porta 5001
+- **Client HTTP com tratamento de excecoes:** o arquivo `api_client.py` trata `ConnectionError`, `Timeout`, `HTTPError` e respostas em formato inesperado, retornando mensagens amigaveis ao usuario
+- **Tabulator.js via CDN:** evita necessidade de build no frontend, mantendo o projeto simples e facil de executar
+- **SQLite:** banco leve, sem necessidade de servidor externo, ideal para o escopo do desafio
+- **Werkzeug para hash de senha:** gera hash seguro com `generate_password_hash` e valida com `check_password_hash`, sem dependencia extra alem do Flask
+- **Seed idempotente:** o script `seed.py` pode ser executado varias vezes sem duplicar dados
+
+---
+
+## 🔒 Variaveis de Ambiente
+
+| Variavel | Descricao | Valor padrao |
+|----------|-----------|--------------|
+| `SECRET_KEY` | Chave secreta do Flask para sessions | `dev-secret-key` |
+| `DATABASE_PATH` | Caminho do arquivo SQLite | `database.db` |
+| `API_URL` | URL da API mock | `http://localhost:5001` |
+
+---
+
+## 📌 Limitacoes Conhecidas
+
+- Autenticacao baseada em session do Flask (sem JWT)
+- Dados de agendamentos mockados em memoria (nao persistidos em banco)
 - Sem paginacao na tabela (adequado para o volume de dados do desafio)
+- SQLite nao recomendado para ambientes de alta concorrencia
+
+---
+
+Desenvolvido por **Douglas** como desafio tecnico. 🚀

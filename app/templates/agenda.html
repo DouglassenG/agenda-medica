@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda Medica</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://unpkg.com/tabulator-tables@6.3.1/dist/css/tabulator.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="agenda-container">
+        <div class="agenda-header">
+            <h1>Agenda Medica</h1>
+            <a href="{{ url_for('auth.logout') }}" class="btn-logout">Sair</a>
+        </div>
+
+        <p style="margin-bottom: 16px; color: #718096;">Bem-vindo, {{ username }}!</p>
+
+        <form method="GET" action="{{ url_for('auth.agenda') }}" class="search-bar">
+            <input
+                type="text"
+                name="busca"
+                placeholder="Buscar por paciente, CPF ou medico..."
+                value="{{ busca }}"
+            >
+            <button type="submit">Buscar</button>
+        </form>
+
+        {% if erro %}
+            <div class="status-message status-error">{{ erro }}</div>
+        {% endif %}
+
+        {% if busca and agendamentos is not none and agendamentos|length == 0 %}
+            <div class="status-message status-warning">Nenhum registro encontrado para "{{ busca }}".</div>
+        {% endif %}
+
+        {% if agendamentos is none and not erro %}
+            <div class="status-message status-warning">Nenhum agendamento disponivel.</div>
+        {% endif %}
+
+        <div id="tabela-agenda"></div>
+    </div>
+
+    <script src="https://unpkg.com/tabulator-tables@6.3.1/dist/js/tabulator.min.js"></script>
+    <script>
+        var dados = {{ agendamentos | tojson if agendamentos else '[]' | safe }};
+
+        var table = new Tabulator("#tabela-agenda", {
+            data: dados,
+            layout: "fitColumns",
+            placeholder: "Nenhum agendamento disponivel.",
+            columns: [
+                {title: "Data", field: "data", width: 110},
+                {title: "Horario", field: "horario", width: 90},
+                {title: "Paciente", field: "paciente", headerFilter: "input"},
+                {title: "CPF", field: "cpf", width: 150, headerFilter: "input"},
+                {title: "Medico", field: "medico", headerFilter: "input"},
+                {title: "Especialidade", field: "especialidade", width: 140},
+                {title: "Convenio", field: "convenio", width: 140},
+                {title: "Status", field: "status", width: 120,
+                    formatter: function(cell) {
+                        var value = cell.getValue();
+                        var colors = {
+                            "Confirmado": "#276749",
+                            "Aguardando": "#975a16",
+                            "Cancelado": "#c53030"
+                        };
+                        var color = colors[value] || "#333";
+                        return "<span style='color:" + color + ";font-weight:600'>" + value + "</span>";
+                    }
+                }
+            ]
+        });
+    </script>
+</body>
+</html>

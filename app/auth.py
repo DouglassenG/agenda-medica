@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from app.models import authenticate_user
+from app.api_client import buscar_agendamentos
 import logging
 
 logger = logging.getLogger(__name__)
@@ -43,11 +44,21 @@ def login():
     return render_template("login.html")
 
 
-@auth_bp.route("/agenda")
+@auth_bp.route("/agenda", methods=["GET"])
 def agenda():
     if not session.get("user_id"):
         return redirect(url_for("auth.login"))
-    return f"Bem-vindo, {session['username']}! (agenda sera implementada no passo 3)"
+
+    busca = request.args.get("busca", "").strip()
+    dados, erro = buscar_agendamentos(busca)
+
+    return render_template(
+        "agenda.html",
+        agendamentos=dados,
+        erro=erro,
+        busca=busca,
+        username=session["username"]
+    )
 
 
 @auth_bp.route("/logout")

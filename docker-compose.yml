@@ -1,0 +1,22 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "5001:5001"
+    environment:
+      - FLASK_ENV=production
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - SECRET_KEY=chave-secreta-docker
+      - DATABASE_PATH=database.db
+      - API_URL=http://api:5001
+    depends_on:
+      - api

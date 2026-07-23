@@ -1,0 +1,12 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY api_mock/ ./api_mock/
+
+EXPOSE 5001
+
+CMD ["python", "api_mock/server.py"]
